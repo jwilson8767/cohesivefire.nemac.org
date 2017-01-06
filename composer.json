@@ -1,0 +1,15 @@
+{
+  "name" : "nemac/cohesivefire",
+  "description" : "",
+  "minimum-stability" : "dev",
+  "license" : "proprietary",
+  "authors" : [
+    {
+      "name" : "NEMAC",
+      "email" : "nemac@unca.edu"
+    }
+  ],
+  "require": {
+    "aws/aws-sdk-php": "^3.20"
+  }
+}
