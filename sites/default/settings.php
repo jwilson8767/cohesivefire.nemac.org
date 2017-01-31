@@ -582,7 +582,7 @@ if (isset($_ENV['DRUPAL_DB_HOSTNAME'])
                 'host' => $_ENV['DRUPAL_DB_HOSTNAME'],
                 'port' => $_ENV['DRUPAL_DB_PORT'],
                 'database' => $_ENV['DRUPAL_DB_NAME'],
-                'username' => $kmsClient->decrypt(['CiphertextBlob' => base64_decode($_ENV['DRUPAL_DB_USERNAME'])])['Plaintext'],
+                'username' => $_ENV['DRUPAL_DB_USERNAME'],
                 'password' => $kmsClient->decrypt(['CiphertextBlob' => base64_decode($_ENV['DRUPAL_DB_PASSWORD'])])['Plaintext'],
                 'driver' => 'mysql',
                 'prefix' => '',
