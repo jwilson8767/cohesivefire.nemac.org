@@ -565,43 +565,63 @@ $conf['image_allow_insecure_derivatives'] = TRUE;
  *
  * Remove the leading hash signs to disable.
  */
-# $conf['allow_authorize_operations'] = FALSE;
+#
+
+$databaseSettingsFile = 'temporary://database.settings.json';
 
 
-if (isset($_ENV['DRUPAL_DB_HOSTNAME'])
-    && isset($_ENV['DRUPAL_DB_PORT'])
-    && isset($_ENV['DRUPAL_DB_NAME'])
-    && isset($_ENV['DRUPAL_DB_USERNAME'])
-    && isset($_ENV['DRUPAL_DB_PASSWORD'])
-) {
-    debug('Using database credentials set in environment...');
-    $kmsClient = new \Aws\Kms\KmsClient([]);
-    $databases = [
-        'default' => [
+if (file_exists($databaseSettingsFile)) {
+    //Using stored settings
+    $databases = json_decode(file_get_contents($databaseSettingsFile));
+}
+else {
+    if (isset($_ENV['APPLICATION'])
+        && isset($_ENV['REGION'])
+        && isset($_ENV['DRUPAL_DB_HOSTNAME'])
+        && isset($_ENV['DRUPAL_DB_PORT'])
+        && isset($_ENV['DRUPAL_DB_NAME'])
+        && isset($_ENV['DRUPAL_DB_USERNAME'])
+        && isset($_ENV['DRUPAL_DB_PASSWORD'])
+    ) {
+        // Using database credentials set in environment
+        $kmsClient = new \Aws\Kms\KmsClient(['version' => 'latest', 'region' => $_ENV['REGION']]);
+        $password = $kmsClient->decrypt([
+            'CiphertextBlob' => base64_decode($_ENV['DRUPAL_DB_PASSWORD']),
+            'EncryptionContext' => [
+                'Application' => $_ENV['APPLICATION'],
+                'Database' => $_ENV['DRUPAL_DB_NAME']
+            ]
+        ])['Plaintext'];
+        $databases = [
             'default' => [
-                'host' => $_ENV['DRUPAL_DB_HOSTNAME'],
-                'port' => $_ENV['DRUPAL_DB_PORT'],
-                'database' => $_ENV['DRUPAL_DB_NAME'],
-                'username' => $_ENV['DRUPAL_DB_USERNAME'],
-                'password' => $kmsClient->decrypt(['CiphertextBlob' => base64_decode($_ENV['DRUPAL_DB_PASSWORD'])])['Plaintext'],
-                'driver' => 'mysql',
-                'prefix' => '',
+                'default' => [
+                    'host' => $_ENV['DRUPAL_DB_HOSTNAME'],
+                    'port' => $_ENV['DRUPAL_DB_PORT'],
+                    'database' => $_ENV['DRUPAL_DB_NAME'],
+                    'username' => $_ENV['DRUPAL_DB_USERNAME'],
+                    'password' => $password,
+                    'driver' => 'mysql',
+                    'prefix' => '',
+                ],
             ],
-        ],
-    ];
-} else {
-    debug('Missing database credential environment variables. Using local/development credentials...');
-    $databases = [
-        'default' => [
+        ];
+        file_unmanaged_save_data(json_encode($databases), $databaseSettingsFile, true);
+        drupal_chmod($databaseSettingsFile, 600);
+    }
+    else {
+        // Missing database credential environment variables. Using local/development credentials
+        $databases = [
             'default' => [
-                'host' => "localhost",
-                'port' => "3306",
-                'database' => "drupal",
-                'username' => "root",
-                'password' => "root",
-                'driver' => 'mysql',
-                'prefix' => '',
+                'default' => [
+                    'host' => "localhost",
+                    'port' => "3306",
+                    'database' => "drupal",
+                    'username' => "root",
+                    'password' => "root",
+                    'driver' => 'mysql',
+                    'prefix' => '',
+                ],
             ],
-        ],
-    ];
+        ];
+    }
 }
