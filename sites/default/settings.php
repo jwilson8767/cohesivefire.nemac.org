@@ -572,7 +572,7 @@ $databaseSettingsFile = '/tmp/database.settings.json';
 
 if (file_exists($databaseSettingsFile)) {
     //Using stored settings
-    $databases = json_decode(file_get_contents($databaseSettingsFile));
+    $databases = json_decode(file_get_contents($databaseSettingsFile), true);
 }
 else {
     if (isset($_ENV['APPLICATION'])
@@ -606,7 +606,7 @@ else {
             ],
         ];
         file_put_contents($databaseSettingsFile, json_encode($databases), FILE_TEXT);
-        chmod($databaseSettingsFile, 0600);
+        chmod($databaseSettingsFile, 0660);
     }
     else {
         // Missing database credential environment variables. Using local/development credentials
@@ -625,3 +625,5 @@ else {
         ];
     }
 }
+
+$settings['install_profile'] = 'standard';
