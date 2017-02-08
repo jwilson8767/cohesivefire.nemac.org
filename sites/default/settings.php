@@ -567,7 +567,7 @@ $conf['image_allow_insecure_derivatives'] = TRUE;
  */
 #
 
-$databaseSettingsFile = 'temporary://database.settings.json';
+$databaseSettingsFile = '/tmp/database.settings.json';
 
 
 if (file_exists($databaseSettingsFile)) {
@@ -605,8 +605,8 @@ else {
                 ],
             ],
         ];
-        file_unmanaged_save_data(json_encode($databases), $databaseSettingsFile, true);
-        drupal_chmod($databaseSettingsFile, 600);
+        file_put_contents($databaseSettingsFile, json_encode($databases), FILE_TEXT);
+        chmod($databaseSettingsFile, 0600);
     }
     else {
         // Missing database credential environment variables. Using local/development credentials
