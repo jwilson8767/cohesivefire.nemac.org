@@ -10,11 +10,6 @@
     }
   ],
   "require" : {
-    "aws/aws-sdk-php" : "^3.20"
-  },
-  "scripts" : {
-    "post-install-cmd" : [
-      "cd sites/all/modules/composer_manager && composer install"
-    ]
+    "aws/aws-sdk-php": "^3.20"
   }
 }

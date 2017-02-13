@@ -630,6 +630,7 @@ $settings['install_profile'] = 'standard';
 
 // s3fs configuration
 $conf['s3fs_use_instance_profile'] = TRUE;
+$conf['s3fs_region'] = $_ENV['REGION'];
 $conf['s3fs_bucket'] = $_ENV['ASSET_STORE'];
 $conf['s3fs_root_folder'] = $_ENV['APPLICATION'];
 $conf['s3fs_use_s3_for_public'] = TRUE;
