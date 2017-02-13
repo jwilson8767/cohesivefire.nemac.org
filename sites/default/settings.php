@@ -628,6 +628,9 @@ else {
 
 $settings['install_profile'] = 'standard';
 
+$conf['composer_manager_vendor_dir'] = DRUPAL_ROOT . '/sites/all/vendor';
+$conf['composer_manager_file_dir'] = DRUPAL_ROOT . '/sites/all/composer';
+
 // s3fs configuration
 $conf['s3fs_use_instance_profile'] = TRUE;
 $conf['s3fs_region'] = $_ENV['REGION'];
