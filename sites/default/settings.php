@@ -638,6 +638,7 @@ $conf['s3fs_bucket'] = $_ENV['ASSET_STORE'];
 $conf['s3fs_root_folder'] = $_ENV['APPLICATION'];
 $conf['s3fs_use_s3_for_public'] = TRUE;
 $conf['s3fs_use_s3_for_private'] = TRUE;
+$conf['s3fs_no_rewrite_cssjs'] = FALSE;
 $conf['s3fs_presigned_urls'] = "300|private/*";
 $conf['s3fs_public_folder'] = 'public';
 $conf['s3fs_private_folder'] = 'private';

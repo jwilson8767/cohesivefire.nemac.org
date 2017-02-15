@@ -15,7 +15,7 @@
       "cd sites/all/composer && composer install"
     ],
     "post-update-cmd" : [
-      "cd sites/all/composer && composer update"
+      "cd sites/all/composer && composer install"
     ]
   }
 }
