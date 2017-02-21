@@ -567,9 +567,13 @@ $conf['image_allow_insecure_derivatives'] = TRUE;
  */
 #
 
+$settings['install_profile'] = 'standard';
+
+$conf['composer_manager_vendor_dir'] = DRUPAL_ROOT . '/vendor';
+$conf['composer_manager_file_dir'] = DRUPAL_ROOT;
+
 $databaseSettingsFile = '/tmp/database.settings.json';
-
-
+try {
 if (file_exists($databaseSettingsFile)) {
     //Using stored settings
     $databases = json_decode(file_get_contents($databaseSettingsFile), true);
@@ -624,12 +628,12 @@ else {
             ],
         ];
     }
+}}catch (Exception $ex){
+    error_log("Failed to load database settings, exception follows:");
+    error_log($ex);
+    throw $ex;
 }
 
-$settings['install_profile'] = 'standard';
-
-$conf['composer_manager_vendor_dir'] = DRUPAL_ROOT . '/sites/all/vendor';
-$conf['composer_manager_file_dir'] = DRUPAL_ROOT . '/sites/all/composer';
 
 // s3fs configuration
 $conf['s3fs_use_instance_profile'] = TRUE;
