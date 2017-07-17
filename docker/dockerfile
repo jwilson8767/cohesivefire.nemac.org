@@ -1,20 +1,39 @@
-FROM phusion/baseimage:0.9.21
+FROM centos:7
 
 VOLUME /app
 VOLUME /secrets
 
+ENV ENABLE_DEBUGGING 'false'
+ENV COMPOSER_HOME="/opt/.composer"
+ENV PRIMARY_DOMAIN="drupal.local"
+ENV container docker
+RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
+systemd-tmpfiles-setup.service ] || rm -f $i; done); \
+rm -f /lib/systemd/system/multi-user.target.wants/*;\
+rm -f /etc/systemd/system/*.wants/*;\
+rm -f /lib/systemd/system/local-fs.target.wants/*; \
+rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
+rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
+rm -f /lib/systemd/system/basic.target.wants/*;\
+rm -f /lib/systemd/system/anaconda.target.wants/*;
+
 # Install Apache, PHP, Python, the AWS CLI and some other tools we need
-COPY build.sh /build/build.sh
-RUN /build/build.sh
-# Apache configuration
-COPY apache2/conf-available/ /etc/apache2/conf-available/
-COPY apache2/sites-available/ /etc/apache2/sites-available/
+COPY install.sh /docker/install.sh
+RUN /docker/install.sh
+#configs
+COPY httpd/ /etc/httpd/
+COPY configs.sh /docker/configs.sh
+RUN /docker/configs.sh
+
+
 COPY apache-service.sh /etc/service/apache2/run
-RUN a2enmod rewrite expires headers proxy proxy_http ssl
-RUN a2enconf security s3-proxy vhost_app
-ENV COMPOSER_HOME="/.composer"
+#RUN a2enmod rewrite expires headers proxy proxy_http ssl
+#RUN a2enconf security s3-proxy vhost_app
+
 
 # Container start scripts
-COPY my_init.d/* /etc/my_init.d/
+#COPY my_init.d/* /etc/my_init.d/
 
-CMD ["/sbin/my_init"]
+#CMD ["/sbin/my_init"]
+
+CMD ["/usr/sbin/runit-init"]
