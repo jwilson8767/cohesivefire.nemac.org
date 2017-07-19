@@ -5,10 +5,10 @@
 
 composer global require hirak/prestissimo
 
-chown www-data:www-data /.composer
+chown apache:apache /.composer
 
 #run composer install
-su -s "/bin/bash" -c "cd /app/ && composer install" www-data
+su -s "/bin/bash" -c "cd /app/ && composer install" apache
 
 chmod 660 /app/web/sites/default/settings.php 2> /dev/null
 echo "<?php require(dirname(\$app_root) . '/settings.php');" > /app/web/sites/default/settings.php

@@ -4,15 +4,15 @@
 #
 set -x
 
-#Fixes shared folder permission issues.
+# Fixes most shared folder permission issues.
 if [[ `stat -c "%u" /app` != 0 ]]; then
-#By changing www-data's uid we avoid having to chown all files /app
-usermod --non-unique --uid `stat -c "%u" /app` www-data
+  # By changing apache's uid we avoid having to chown all files /app
+  usermod --non-unique --uid `stat -c "%u" /app` apache
 else
-#Root owns the folder, best to just chown.
-chown www-data:www-data /app -R
+  # Root owns the folder, best to just chown.
+  chown apache:apache /app -R
 fi;
 
 # Apache fails to start if the log directory doesn't exist.
 mkdir -p /var/log/apache2
-chown www-data:www-data /var/log/apache2
+chown apache:apache /var/log/httpd
