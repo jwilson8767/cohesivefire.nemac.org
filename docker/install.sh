@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 set -ex
 
-
-
-rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
 rpm -Uvh https://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm
 yum -y install \
@@ -27,17 +24,13 @@ mysql-utilities \
 awscli \
 certbot-apache \
 ;
-curl -s https://packagecloud.io/install/repositories/imeyer/runit/script.rpm.sh | bash
-yum -y install runit-2.1.2-3.el7.centos.x86_64
-
 
 yum clean all
-
-
+rm -f /var/log/yum.log
 
 ## get CA certificates for curl/openssl
 curl -sS https://curl.haxx.se/ca/cacert.pem > /etc/cacert.pem
 echo 'openssl.cafile="/etc/cacert.pem"' >> /etc/php.ini
 
-## Install composer and drush
+## Install composer
 curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer && chmod 755 /usr/bin/composer

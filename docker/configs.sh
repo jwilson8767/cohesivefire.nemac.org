@@ -1,24 +1,26 @@
 #!/usr/bin/env bash
-set -ex
+set -e
 
+#
 # Apache/httpd config
+#
 rm -rf /etc/httpd/conf.d
-sed --in-place '/IncludeOptional conf.d\/\*.conf/d' /etc/httpd/conf/httpd.conf
-
+#rm -rf /etc/httpd/conf
 mkdir /etc/httpd/conf-enabled
 mkdir /etc/httpd/sites-enabled
+mkdir /etc/httpd/mods-enabled
+ln -sf /etc/httpd/
+echo '
+source /etc/container_environment.sh
+OPTIONS="-f /etc/httpd/httpd.conf"
+' >> /etc/sysconfig/httpd
 
-echo "
-IncludeOptional conf-enabled/*.conf
-IncludeOptional sites-enabled/*.conf
+a2enconf security vhost_app php
+a2ensite http
 
-ServerName \${PRIMARY_DOMAIN}
-" >> /etc/httpd/conf/httpd.conf
-
-
-
-
+#
 # PHP config
+#
 echo "
     date.timezone = \${PHP_DATE_TIMEZONE}
     memory_limit = \${PHP_MEMORY_LIMIT}
@@ -36,6 +38,8 @@ echo "
     allow_url_fopen = On
        " >> /etc/php.ini
 
+echo "pm.max_requests = 300" >> /etc/php-fpm.d/www.conf
+
 echo  "
     xdebug.enabled=\${ENABLE_DEBUGGING}
     xdebug.remote_enable=1
@@ -45,3 +49,5 @@ echo  "
     xdebug.remote_mode=req
     " >> /etc/php.d/xdebug.ini
 
+# Restrict configs
+chmod -R 655 /etc/httpd /etc/my_init.d /etc/php*
