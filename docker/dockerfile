@@ -1,0 +1,27 @@
+FROM waystonesystems/baseimage-centos:0.1.0
+
+VOLUME /app
+VOLUME /secrets
+
+ENV ENABLE_DEBUGGING 'false'
+ENV COMPOSER_HOME="/opt/.composer"
+ENV PRIMARY_DOMAIN="drupal.local"
+ENV container docker
+
+# Install Apache, PHP, Python, the AWS CLI and some other tools we need
+COPY install.sh /docker/install.sh
+RUN /docker/install.sh
+# Setup utility commands
+COPY commands.sh /docker/commands.sh
+RUN /docker/commands.sh
+# Configs
+COPY httpd /etc/httpd
+COPY service /etc/service
+COPY my_init.d /etc/my_init.d
+COPY configs.sh /docker/configs.sh
+RUN /docker/configs.sh
+
+
+CMD ["/sbin/my_init"]
+
+#CMD ["/usr/sbin/runit-init"]

@@ -1,11 +1,59 @@
 {
-    "require": {
-        "php": ">=5.3.0",
-        "aws/aws-sdk-php": "~3.0"
-    },
-    "config": {
-        "autoloader-suffix": "ComposerManager",
-        "vendor-dir": "./vendor"
-    },
-    "prefer-stable": true
+  "name": "nemac/nemac-drupal-project",
+  "description": "",
+  "type": "project",
+  "license": "PROPRIETARY",
+  "authors": [
+    {
+      "name": "Joshua Wilson",
+      "email": "jwilson@waystone.systems"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://packages.drupal.org/7"
+    }
+  ],
+  "require": {
+  },
+  "config": {
+    "autoloader-suffix": "ComposerManager",
+    "vendor-dir": "./vendor",
+    "sort-packages": true
+  },
+  "require-dev": {
+  },
+  "conflict": {
+    "drupal/drupal": "*"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "autoload": {
+    "classmap": [
+      "scripts/composer/ScriptHandler.php"
+    ]
+  },
+  "scripts": {
+    "pre-install-cmd": [
+    ],
+    "pre-update-cmd": [
+    ],
+    "post-install-cmd": [
+    ],
+    "post-update-cmd": [
+    ]
+  },
+  "extra": {
+    "installer-paths": {
+      "web/core": ["type:drupal-core"],
+      "web/libraries/{$name}": ["type:drupal-library"],
+      "web/modules/contrib/{$name}": ["type:drupal-module"],
+      "web/profiles/contrib/{$name}": ["type:drupal-profile"],
+      "web/themes/contrib/{$name}": ["type:drupal-theme"],
+      "drush/{$name}": ["type:drupal-drush"],
+      "web/modules/custom/{$name}": ["type:drupal-custom-module"],
+      "web/themes/custom/{$name}": ["type:drupal-custom-theme"]
+    }
+  }
 }
