@@ -42,9 +42,10 @@ echo "pm.max_requests = 300" >> /etc/php-fpm.d/www.conf
 
 echo  "
     xdebug.enabled=\${ENABLE_DEBUGGING}
-    xdebug.remote_enable=1
+    xdebug.remote_enable=\${ENABLE_DEBUGGING}
+    xdebug.remote_port=9001
     xdebug.remote_host=\${XDEBUG_REMOTE_HOST}
-    xdebug.remote_autostart=1
+    xdebug.remote_autostart=\${ENABLE_DEBUGGING}
     xdebug.remote_handler=dbgp
     xdebug.remote_mode=req
     " >> /etc/php.d/xdebug.ini
