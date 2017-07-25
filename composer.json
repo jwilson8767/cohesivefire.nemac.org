@@ -1,5 +1,5 @@
 {
-  "name": "nemac/nemac-drupal-project",
+  "name": "nemac/drupal-project",
   "description": "",
   "type": "project",
   "license": "PROPRIETARY",
@@ -16,6 +16,9 @@
     }
   ],
   "require": {
+    "composer/installers": "^1.2",
+    "cweagans/composer-patches": "^1.6",
+    "drush/drush": "~8.0"
   },
   "config": {
     "autoloader-suffix": "ComposerManager",
@@ -29,11 +32,6 @@
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
-  "autoload": {
-    "classmap": [
-      "scripts/composer/ScriptHandler.php"
-    ]
-  },
   "scripts": {
     "pre-install-cmd": [
     ],

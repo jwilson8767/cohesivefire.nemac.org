@@ -569,6 +569,7 @@ $settings['file_chmod_file'] = 0664;
 $conf['composer_manager_vendor_dir'] = DRUPAL_ROOT . '/vendor';
 $conf['composer_manager_file_dir'] = DRUPAL_ROOT;
 
+error_log(getenv('DRUPAL_DB_NAME'));
 $databases['default']['default'] = array (
   'database' => getenv('DRUPAL_DB_NAME'),
   'username' => getenv('DRUPAL_DB_USERNAME'),
@@ -576,7 +577,6 @@ $databases['default']['default'] = array (
   'prefix' => '',
   'host' => getenv('DRUPAL_DB_HOSTNAME'),
   'port' => '3306',
-  'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
   'driver' => 'mysql',
 );
 
