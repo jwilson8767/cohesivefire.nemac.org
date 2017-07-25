@@ -4,8 +4,8 @@
 #
 
 if [[ ! "$ENABLE_HTTPS" = true ]]; then
-echo "HTTPS is disabled. Skipping config."
-exit 0;
+  echo "HTTPS is disabled. Skipping config."
+  exit 0;
 fi
 
  # Restore the most recent backup, if any (also helps sync between instances).
@@ -48,6 +48,13 @@ for i in 1 2 3 4 5; do
     # TODO CRON for SSL cert renewal sync.
     # echo "52 0,12 * * * root certbot renew -n" > /etc/cron.d/certbot
 
+    cat > /etc/cron.d/certbot <<- EOM
+# This short cron file ensures that Certbot certificates are renewed
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+# At 00:52 and 12:52 check for certificates that need to be renewed.
+52 0,12 * * * root "certbot renew -n"
+EOM
     # Backup the certs.
     ##Generate KMS Data Key for Envelope Encryption.
     backupFile="/secrets/letsencrypt_${PRIMARY_DOMAIN}_$(date +'%Y-%m-%d_%H%M').tar.gz"
@@ -57,10 +64,4 @@ for i in 1 2 3 4 5; do
   fi
 done
 echo "Timed out waiting for Public Domain to be routed to this instance. Skipping cert registration."
-
-
-
-
-
-
 

@@ -23,6 +23,7 @@ services:
     volumes:
       - ${PROJECT_DIR}:/app
       - composer_cache:/opt/.composer
+      - ${PROJECT_DIR}/logs:/var/log
     environment:
       SECRETS_STORE: 'nemac-secrets-us-east-1/cohesivefire-nemac-org/'
       ASSET_STORE: 'nemac-assets-us-east-1/cohesivefire-nemac-org/'
@@ -38,7 +39,7 @@ services:
       DRUPAL_DB_PASSWORD: 'drupal'
       DRUPAL_DB_NAME: 'drupal'
       DRUPAL_DB_PORT: '3306'
-      ENABLE_DEBUGGING: '1'
+      ENABLE_DEBUGGING: 'true'
       ENABLE_HTTPS: 'false'
       XDEBUG_REMOTE_HOST: '192.168.99.1'
       ADMIN_EMAIL: 'admin@drupal.localhost'

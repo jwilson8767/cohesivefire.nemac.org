@@ -20,7 +20,7 @@ php71w-mbstring \
 php71w-mcrypt \
 php71w-mysql \
 php71w-pecl-xdebug.x86_64 \
-mysql-utilities \
+mysql-community-client \
 awscli \
 certbot-apache \
 ;

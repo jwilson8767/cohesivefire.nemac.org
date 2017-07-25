@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
-
 # if we are in the container, just call drush.
-if [[ -h "/app/vendor/bin/drush" ]]; then
-cd /app/web && /app/vendor/bin/drush $@
+if [[ -e "/app/vendor/bin/drush" ]]; then
+/app/vendor/bin/drush --root=/app/web "$@"
 exit 0;
 fi
 
@@ -21,5 +20,5 @@ for i in "$@"; do
 done
 DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 set -x;
-$DIR/dbash.sh -c "cd /app/web && /app/vendor/bin/drush $C"
+$DIR/dbash.sh -c "/app/vendor/bin/drush --root=/app/web $C"
 

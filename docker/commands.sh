@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-echo -e " echo -e \"
+cat >> "/etc/bash.bashrc" <<- EOM
+echo -e "
 Utility commands:
   drush
   composer
@@ -10,13 +11,12 @@ Utility commands:
   a2dissite - Disable apache vhost
   a2enconf - Enable apache config file
   a2disconf - Disable apache config file
-\"" >> "/etc/bash.bashrc";
-
+"
+EOM
 
 ln -sf /app/scripts/drush.sh /usr/local/bin/drush
 ln -sf /app/scripts/sql-dump.sh /usr/local/bin/sql-dump
 ln -sf /app/scripts/sql-import.sh /usr/local/bin/sql-import
-
 
 # The helper scripts below have been included in this file to reduce clutter, but could be moved elsewhere just as easily.
 
@@ -146,8 +146,6 @@ cat > /usr/bin/a2disconf <<- EOM
     fi
   done
 EOM
-
-
 
 chmod +x /usr/bin/a2*
 

@@ -8,7 +8,8 @@ This project provides scaffolding to build a containerized Drupal webserver.
 
 * **.ebextensions/** - Files run when deploying the application to Elastic Beanstalk
 * **docker/** - Files used to build the docker image which runs the webserver.
-* **docker/apache2/** - Apache2 config files.
+* **docker/httpd/** - Apache2 config files.
+* **docker/service/** - Services to run and monitor in the container.
 * **docker/my_init.d/** - Scripts to run when the container first starts.
 * **web/** - The webroot in which Drupal is installed.
 * **docker-compose.yml/** - Config for running development environment locally.
