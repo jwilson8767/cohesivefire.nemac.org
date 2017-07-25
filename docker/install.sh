@@ -4,6 +4,7 @@ set -ex
 rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
 rpm -Uvh https://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm
 yum -y install \
+which \
 wget \
 curl \
 zip \
@@ -20,7 +21,7 @@ php71w-mbstring \
 php71w-mcrypt \
 php71w-mysql \
 php71w-pecl-xdebug.x86_64 \
-mysql-utilities \
+mysql-community-client \
 awscli \
 certbot-apache \
 ;
@@ -34,3 +35,5 @@ echo 'openssl.cafile="/etc/cacert.pem"' >> /etc/php.ini
 
 ## Install composer
 curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer && chmod 755 /usr/bin/composer
+export COMPOSER_ALLOW_SUPERUSER=1
+composer global require hirak/prestissimo
