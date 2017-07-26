@@ -36,10 +36,3 @@ Utility commands:
   sql-dump - Runs \`drush sql-dump\` in running app container.
   sql-import - Imports sql dump from file using drush.
 EOM
-
-* **drun** - Runs the local development environment. (usually preceded by `image-build`)
-* **dps** - Lists running docker containers.
-* **dlog** - Shows log output from current running app container.
-* **dbash** - Interactive terminal in running app container.
-* **build-image** - Build the docker image locally.
-* **push-image** - Pushes the docker image to the image repository with the provided tag.

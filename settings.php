@@ -565,9 +565,9 @@ $conf['image_allow_insecure_derivatives'] = TRUE;
 $settings['file_chmod_directory'] = 0775;
 $settings['file_chmod_file'] = 0664;
 
-
-$conf['composer_manager_vendor_dir'] = DRUPAL_ROOT . '/vendor';
-$conf['composer_manager_file_dir'] = DRUPAL_ROOT;
+// We combine vendor directories but leave the config files separate to ensure composer_manager doesn't conflict with the master composer.json file.
+//$conf['composer_manager_vendor_dir'] = DRUPAL_ROOT . '/../vendor';
+//$conf['composer_manager_file_dir'] = DRUPAL_ROOT;
 
 error_log(getenv('DRUPAL_DB_NAME'));
 $databases['default']['default'] = array (
@@ -582,32 +582,35 @@ $databases['default']['default'] = array (
 
 $settings['install_profile'] = 'standard';
 
+$conf['file_private_path'] = "../private";
+
 // s3fs configuration
 if (!empty(getenv('ASSET_STORE'))) {
 
-  if (!empty(getenv('S3_SECRET_ACCESS_KEY')) && !empty(getenv('S3_ACCESS_KEY_ID'))){
-    $config['s3fs.settings']['access_key']=getenv('S3_ACCESS_KEY_ID');
-    $config['s3fs.settings']['secret_key']=getenv('S3_SECRET_ACCESS_KEY');
+  if (!empty(getenv('S3_ACCESS_KEY_ID') && !empty(getenv('S3_SECRET_ACCESS_KEY')))){
+    $conf['s3fs_awssdk_access_key']=getenv('S3_ACCESS_KEY_ID');
+    $conf['s3fs_awssdk_secret_key']=getenv('S3_SECRET_ACCESS_KEY');
+    $conf['s3fs_use_instance_profile'] = false;
   }
   else {
-    $config['s3fs.settings']['s3fs_use_instance_profile'] = true;
+    $conf['s3fs_use_instance_profile'] = true;
   }
-  $assetStore = substr(getenv('ASSET_STORE'),5);
+  $assetStore =getenv('ASSET_STORE');
   $bucket=substr( $assetStore,0, strpos($assetStore,'/'));
   $prefix=substr( $assetStore,strpos($assetStore,'/') + 1);
   $prefix=rtrim($prefix,"/");
 
-  $config['s3fs.settings']['region'] = getenv('REGION');
-  $config['s3fs.settings']['bucket'] = $bucket;
-  $config['s3fs.settings']['use_cname'] = false;
-  $config['s3fs.settings']['use_https'] = true;
-  $config['s3fs.settings']['domain'] = 's3.amazonaws.com' ;
-  $config['s3fs.settings']['use_customhost'] = false;
-  $config['s3fs.settings']['root_folder'] = $prefix;
-  $config['s3fs.settings']['no_rewrite_cssjs'] = false;
-  $config['s3fs.settings']['presigned_urls'] = "";
-  $config['s3fs.settings']['public_folder'] = 'public';
-  $config['s3fs.settings']['private_folder'] = 'private';
-  $settings['s3fs.use_s3_for_private'] = false;
-  $settings['s3fs.use_s3_for_public'] = false;
+  $conf['s3fs_region'] = getenv('REGION');
+  $conf['s3fs_bucket'] = $bucket;
+  $conf['s3fs_use_cname'] = false;
+  $conf['s3fs_use_https'] = true;
+  $conf['s3fs_domain'] = $bucket . '.s3.amazonaws.com';
+  $conf['s3fs_use_customhost'] = false;
+  $conf['s3fs_root_folder'] = $prefix;
+  $conf['s3fs_no_rewrite_cssjs'] = false;
+  $conf['s3fs_presigned_urls'] = "";
+  $conf['s3fs_public_folder'] = 'public';
+  $conf['s3fs_private_folder'] = 'private';
+  $conf['s3fs_use_s3_for_private'] = false;
+  $conf['s3fs_use_s3_for_public'] = true;
 }

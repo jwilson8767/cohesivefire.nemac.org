@@ -13,43 +13,52 @@
     {
       "type": "composer",
       "url": "https://packages.drupal.org/7"
+    },
+    {
+      "type": "vcs",
+      "url": "https://git.drupal.org/project/s3fs"
     }
   ],
   "require": {
     "composer/installers": "^1.2",
     "cweagans/composer-patches": "^1.6",
-    "drush/drush": "~8.0"
+    "drush/drush": "~8.0",
+    "drupal/s3fs":"dev-7.x-3.x"
   },
   "config": {
-    "autoloader-suffix": "ComposerManager",
     "vendor-dir": "./vendor",
     "sort-packages": true
   },
   "require-dev": {
   },
   "conflict": {
-    "drupal/drupal": "*"
+    "drupal/core": "*"
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
   "scripts": {
-    "pre-install-cmd": [
-    ],
-    "pre-update-cmd": [
-    ],
+    "index-shim": "target='web/index.php'; chmod -f o+w $target; cp -f index.php $target",
+    "settings-shim": "target='web/sites/default/settings.php'; chmod -f o+w $target; echo '<?php require(DRUPAL_ROOT. \"/../settings.php\");' > web/sites/default/settings.php",
+    "s3fs-mangle": "sed -i -e 's/composer_manager_register_autoloader();//g' web/sites/all/modules/contrib/s3fs/s3fs.module && sed -i -e 's/dependencies\\[\\] = composer_manager//g' web/sites/all/modules/contrib/s3fs/s3fs.info",
+    "pre-install-cmd": [],
+    "pre-update-cmd": [],
     "post-install-cmd": [
+      "@index-shim",
+      "@settings-shim",
+      "@s3fs-mangle"
     ],
     "post-update-cmd": [
+      "@index-shim",
+      "@settings-shim",
+      "@s3fs-mangle"
     ]
   },
   "extra": {
     "installer-paths": {
-      "web/core": ["type:drupal-core"],
       "web/libraries/{$name}": ["type:drupal-library"],
-      "web/modules/contrib/{$name}": ["type:drupal-module"],
+      "web/sites/all/modules/contrib/{$name}": ["type:drupal-module"],
       "web/profiles/contrib/{$name}": ["type:drupal-profile"],
       "web/themes/contrib/{$name}": ["type:drupal-theme"],
-      "drush/{$name}": ["type:drupal-drush"],
       "web/modules/custom/{$name}": ["type:drupal-custom-module"],
       "web/themes/custom/{$name}": ["type:drupal-custom-theme"]
     }

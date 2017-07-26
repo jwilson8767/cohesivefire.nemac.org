@@ -48,6 +48,8 @@ cat >> /etc/php.d/xdebug.ini <<- EOM
     xdebug.remote_autostart=\${ENABLE_DEBUGGING_BOOL}
     xdebug.remote_handler=dbgp
     xdebug.remote_mode=req
+    xdebug.idekey="drupal"
+    xdebug.max_nesting_level=350
 EOM
 
 # Restrict configs

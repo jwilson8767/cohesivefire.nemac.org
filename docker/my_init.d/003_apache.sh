@@ -3,6 +3,13 @@
 # This script is run when the container is first started.
 #
 
+if [[ "true" == "${ENABLE_DEBUGGING}" ]]; then
+echo "1" > /etc/container_environment/ENABLE_DEBUGGING_BOOL
+echo "serverName=drupal.local" > /etc/container_environment/PHP_IDE_CONFIG
+else
+echo "0" > /etc/container_environment/ENABLE_DEBUGGING_BOOL
+fi
+
 if [[ ! "$ENABLE_HTTPS" = true ]]; then
   echo "HTTPS is disabled. Skipping config."
   exit 0;
